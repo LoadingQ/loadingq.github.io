@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dev</title>
+    <style>
+        body {
+            font-family: monospace;
+            color: #007BFF;
+            background-color: #292d34;
+        }
+        #womp {
+            background-color: darkgrey;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 50px auto;
+            width: 50%;
+            text-align: center;
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #ccc;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        #progress {
+            height: 100%;
+            background-color: #007BFF;
+            width: 0%;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            border-radius: 15px 0 0 15px;
+            transition: width 0.5s ease;
+        }
+        span {
+            font-size: 20px;
+        }
+        #loading-text {
+            font-size: 24px;
+            color: #ff3860;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            width: 11em;
+        }
+    </style>
+</head>
+<body>
+    <div id="womp">
+        <h1 id="loading-text"></h1>
+        <div id="progress-bar">
+            <div id="progress"></div>
+        </div>
+        <span id="progress-value">0%</span>
+    </div>
+
+    <script>
+        let progress = 0;
+        const progressBar = document.getElementById("progress");
+        const progressValue = document.getElementById("progress-value");
+        const loadingText = document.getElementById("loading-text");
+
+        const messages = [
+            "...", 
+            "hold on a min", 
+            "this takes time ok", 
+            "almost hold on", 
+            "why yo still here",
+            "still waitin'?", 
+            "this is crazy",
+            "did you know?",
+            "that commets smell",
+            "like rotten eggs",
+            "yeah wtf",
+            "another crazy fact",
+            "it's not the plane",
+            "it's the pilot",
+            "emotional damage",
+            "as einstein once said",
+            "two things are infinite",
+            "the universe",
+            "and the winrar license",
+            "i also once said",
+            "that durov is cooked.",
+            "an apple one day",
+            "showed newton the way",
+            "clownstrike.lol",
+            "did you know about this?",
+            "hell nah you did not",
+            "always remember",
+            "no proof no truth",
+            "as well as",
+            "using google dorks",
+            "doesn't make you a hacker"
+        ];
+        let messageIndex = 0;
+
+        function typeWriterEffect(text, callback) {
+            let i = 0;
+            let displayText = '';
+            const typingSpeed = 100;
+            const deletingSpeed = 50;
+
+            function type() {
+                if (i < text.length) {
+                    displayText += text.charAt(i);
+                    loadingText.textContent = displayText;
+                    i++;
+                    setTimeout(type, typingSpeed);
+                } else {
+                    setTimeout(() => {
+                        deleteText();
+                    }, 2000);
+                }
+            }
+
+            function deleteText() {
+                if (i > 0) {
+                    displayText = displayText.slice(0, -1);
+                    loadingText.textContent = displayText;
+                    i--;
+                    setTimeout(deleteText, deletingSpeed);
+                } else {
+                    setTimeout(() => {
+                        if (callback) callback();
+                    }, 1000);
+                }
+            }
+
+            type();
+        }
+
+        function startTypewriter() {
+            typeWriterEffect(messages[messageIndex], () => {
+                messageIndex = (messageIndex + 1) % messages.length;
+                startTypewriter();
+            });
+        }
+
+        function updateProgress() {
+            if (progress === 99) {
+                progressBar.style.width = progress + "%";
+                progressValue.textContent = progress + "%";
+                setTimeout(startTypewriter, 6000);
+                clearInterval(progressInterval);
+            } else {
+                progress++;
+                progressBar.style.width = progress + "%";
+                progressValue.textContent = progress + "%";
+            }
+        }
+
+        const progressInterval = setInterval(updateProgress, 50);
+    </script>
+</body>
+</html>
